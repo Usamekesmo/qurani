@@ -22,7 +22,7 @@
 
     /* --- Scrolling Verses Bar --- */
     .verses-bar {
-      background-color: #28a745; /* أخضر كاشف */
+      background-color: #28a745;
       color: white;
       padding: 10px 0;
       overflow: hidden;
@@ -30,19 +30,24 @@
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
       font-family: 'Amiri', serif;
       font-size: 18px;
-    }
-    .verses-content {
-      display: inline-block;
-      padding-left: 100%;
-      animation: scroll-right-to-left 120s linear infinite; /* زيادة مدة الأنيميشن لتناسب المحتوى الجديد */
+      position: relative;
+      height: 40px; /* ارتفاع ثابت للحاوية */
     }
     .verse-quote {
-      margin: 0 40px;
-      display: inline-block;
+      position: absolute;
+      width: 100%;
+      text-align: center;
+      transform: translateX(100%); /* تبدأ خارج الشاشة من اليمين */
+      opacity: 0;
+      transition: transform 1s ease-in-out, opacity 1s ease-in-out;
     }
-    @keyframes scroll-right-to-left {
-      0% { transform: translateX(0%); }
-      100% { transform: translateX(-100%); }
+    .verse-quote.active {
+      transform: translateX(0); /* تتحرك إلى المنتصف */
+      opacity: 1;
+    }
+    .verse-quote.exit {
+      transform: translateX(-100%); /* تخرج إلى اليسار */
+      opacity: 0;
     }
 
     /* --- Main Content Padding --- */
@@ -77,7 +82,7 @@
       background: rgba(255, 255, 255, 0.95);
       z-index: 1000;
       overflow-y: auto;
-      padding: 40px;
+      padding: 40px 20px; /* تعديل الحشوة للشاشات الصغيرة */
       box-sizing: border-box;
       backdrop-filter: blur(5px);
     }
@@ -101,13 +106,14 @@
     }
     h2 { font-size: 24px; margin-bottom: 20px; }
     input, select, button {
-      width: 80%;
+      width: 90%; /* زيادة العرض قليلاً */
       padding: 12px;
       margin: 10px 0;
       font-size: 16px;
       border-radius: 10px;
       border: 2px solid #a5d6a7;
       font-family: 'Tajawal', sans-serif;
+      box-sizing: border-box; /* لضمان أن الحشوة لا تزيد العرض */
     }
     button {
         cursor: pointer;
@@ -133,7 +139,7 @@
 
     /* --- Ayah Display Box --- */
     .islamic-pattern {
-      background-color: #e8f5e9; /* خلفية خضراء فاتحة للاقتباس */
+      background-color: #e8f5e9;
       background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2395c297' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
       border: 2px solid #a5d6a7;
       border-radius: 15px;
@@ -175,13 +181,13 @@
     .user-answer { color: #c62828; }
     .correct-answer { color: #2e7d32; }
     #orderMode { display: none; font-family: 'Amiri', serif; }
-    .words-container { display: flex; flex-wrap: wrap; justify-content: flex-start; gap: 8px; padding: 10px; background-color: #f0f8ff; border-radius: 8px; min-height: 40px; margin: 20px 0 15px 0; position: relative; z-index: 2; direction: rtl; }
+    .words-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; padding: 10px; background-color: #f0f8ff; border-radius: 8px; min-height: 40px; margin: 20px 0 15px 0; position: relative; z-index: 2; direction: rtl; }
     .drop-zone { background-color: #fff3e0; border: 2px dashed #d4af37; border-radius: 8px; padding: 20px; min-height: 100px; transition: all 0.3s; margin-bottom: 15px; font-size: 18px; line-height: 2; position: relative; z-index: 1; direction: rtl; text-align: right; }
     .drop-zone.highlight { background-color: #f5eef8; border-color: #8e44ad; }
     .word-btn { padding: 4px 8px; min-width: auto; width: auto; display: inline-flex; justify-content: center; border: none; background-color: transparent; box-shadow: none; color: #7d3c98; font-size: 18px; font-weight: 600; font-family: 'Amiri', 'Tajawal', sans-serif; border-radius: 3px; cursor: pointer; transition: all 0.2s; }
     .word-btn:hover { background-color: #f0e6ff; }
     .word-btn:active { opacity: 0.7; }
-    .order-controls { display: flex; justify-content: right; gap: 5px; margin-top: 10px; }
+    .order-controls { display: flex; justify-content: center; gap: 5px; margin-top: 10px; }
     .order-control-btn { background-color: #8e44ad; color: white; border: none; padding: 12px; font-size: 18px; border-radius: 1px; cursor: pointer; transition: all 0.3s; flex: 1; min-width: 100px; }
     .order-control-btn:hover { background-color: #7d3c98; }
     .empty-message { color: #7f8c8d; font-style: italic; font-size: 16px; }
@@ -197,13 +203,74 @@
     #surahSelectorContainer { transition: all 0.3s ease; }
     .hidden { display: none !important; }
     .user-info-box { background: #f5f5f5; padding: 10px; border-radius: 10px; margin-bottom: 15px; }
+
+    /* --- Responsive Design --- */
+    @media (max-width: 768px) {
+        .main-content {
+            padding: 10px;
+        }
+        .quiz-box {
+            padding: 20px;
+            margin: 10px auto;
+        }
+        h2 {
+            font-size: 20px;
+        }
+        .ayah-decoration {
+            font-size: 20px; /* تصغير خط الآية قليلاً */
+            padding: 20px 15px;
+        }
+        .ayah-decoration::before, .ayah-decoration::after {
+            font-size: 30px; /* تصغير الأقواس */
+        }
+        input, select, button {
+            width: 100%; /* جعل المدخلات تملأ الحاوية */
+            font-size: 15px;
+        }
+        .verses-bar {
+            font-size: 16px; /* تصغير خط الآيات المتحركة */
+        }
+        #instructionsPage {
+            padding: 30px 15px;
+        }
+        #instructionsPage p {
+            font-size: 16px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .welcome-title {
+            font-size: 16px;
+        }
+        .welcome-text {
+            font-size: 14px;
+        }
+        .timer-container {
+            font-size: 16px;
+        }
+        .time-per-question {
+            font-size: 12px;
+        }
+        .word-btn {
+            font-size: 16px; /* تصغير خط الكلمات في اختبار الترتيب */
+        }
+        .drop-zone {
+            font-size: 16px;
+            padding: 15px;
+        }
+        .result-box p {
+            font-size: 16px !important; /* استخدام !important لضمان تطبيق النمط */
+        }
+        .result-box h2 {
+            font-size: 18px;
+        }
+    }
 </style>
 </head>
 <body>
 
 <!-- شريط الآيات المتحرك -->
 <div class="verses-bar">
-  <div class="verses-content">
     <span class="verse-quote">"الَّذِينَ آتَيْنَاهُمُ الْكِتَابَ يَتْلُونَهُ حَقَّ تِلَاوَتِهِ"</span>
     <span class="verse-quote">"وَرَتِّلِ الْقُرْآنَ تَرْتِيلًا"</span>
     <span class="verse-quote">"إِنَّ هَٰذَا الْقُرْآنَ يَهْدِي لِلَّتِي هِيَ أَقْوَمُ"</span>
@@ -214,7 +281,6 @@
     <span class="verse-quote">"كِتَابٌ أَنزَلْنَاهُ إِلَيْكَ مُبَارَكٌ لِّيَدَّبَّرُوا آيَاتِهِ وَلِيَتَذَكَّرَ أُولُو الْأَلْبَابِ"</span>
     <span class="verse-quote">"يَا أَيُّهَا النَّاسُ قَدْ جَاءَتْكُم مَّوْعِظَةٌ مِّن رَّبِّكُمْ وَشِفَاءٌ لِّمَا فِي الصُّدُورِ"</span>
     <span class="verse-quote">"إِنَّ الَّذِينَ يَتْلُونَ كِتَابَ اللَّهِ وَأَقَامُوا الصَّلَاةَ وَأَنفَقُوا مِمَّا رَزَقْنَاهُمْ سِرًّا وَعَلَانِيَةً يَرْجُونَ تِجَارَةً لَّن تَبُورَ"</span>
-  </div>
 </div>
 
 <div class="main-content">
@@ -309,6 +375,38 @@
     </div>
 </div>
 <script>
+// --- START: Verse Scroller Logic ---
+document.addEventListener('DOMContentLoaded', function() {
+    const verses = document.querySelectorAll('.verses-bar .verse-quote');
+    if (verses.length === 0) return; // لا تفعل شيئًا إذا لم تكن هناك آيات
+
+    let currentVerseIndex = 0;
+
+    function showNextVerse() {
+        const currentVerse = verses[currentVerseIndex];
+        const nextVerseIndex = (currentVerseIndex + 1) % verses.length;
+        const nextVerse = verses[nextVerseIndex];
+
+        currentVerse.classList.add('exit');
+        currentVerse.classList.remove('active');
+
+        setTimeout(() => {
+            nextVerse.classList.add('active');
+        }, 100);
+
+        setTimeout(() => {
+            currentVerse.classList.remove('exit');
+        }, 1100);
+
+        currentVerseIndex = nextVerseIndex;
+    }
+
+    verses[currentVerseIndex].classList.add('active');
+    setInterval(showNextVerse, 5000); // تغيير الآية كل 5 ثوانٍ
+});
+// --- END: Verse Scroller Logic ---
+
+
 // إعدادات التليجرام
 const TELEGRAM_BOT_TOKEN = '6671455687:AAHemRdgQbmodCsqeIaha55qfPml_h9cjVQ';
 const TELEGRAM_CHANNEL_ID = '@quranmytest'; // القناة الأولى
@@ -368,7 +466,7 @@ async function sendTelegramMessage(text, chatId = TELEGRAM_CHANNEL_ID) {
       body: JSON.stringify({
         chat_id: chatId,
         text: text,
-        parse_mode: 'HTML' // تفعيل تنسيق HTML للخطوط الجميلة
+        parse_mode: 'HTML'
       })
     });
     return await response.json();
@@ -416,7 +514,7 @@ async function sendFinalReport() {
     day: 'numeric',
     hour: '2-digit',
     minute: '2-digit'
-  });
+  })
 
   let resultMessage = "";
   if (percentage >= 90) resultMessage = "ممتاز! حفظك رائع جداً";
@@ -447,7 +545,7 @@ ${selectedSurah && selectedSurah !== "__all__" ? `📖 <b>السورة:</b> ${se
   if (corrections.length > 0) {
     let detailedReport = `
 📝 <b>تقرير تصحيح الأخطاء</b>
-
+👤 <b>الاسم:</b> ${username || "زائر"}
 ━━━━━━━━━━━━━━
 📊 <b>نوع الاختبار:</b> ${getModeName(mode)}
 ${selectedSurah && selectedSurah !== "__all__" ? `📖 <b>السورة:</b> ${selectedSurah}\n` : ''}
@@ -458,12 +556,12 @@ ${selectedSurah && selectedSurah !== "__all__" ? `📖 <b>السورة:</b> ${se
 
     corrections.forEach((correction, index) => {
       detailedReport += `
-<pre>
-🔹 <b>السؤال ${index + 1}:</b> ${correction.question}
--------------------
-✖ <b>إجابتك:</b> ${correction.userAnswer}
-✔ <b>الصحيحة:</b> ${correction.correctAnswer}
-</pre>
+<blockquote>
+⚪️ <b>السؤال ${index + 1}:</b> ${correction.question}
+- - - - -
+❌ <b>إجابتك:</b> <i>${correction.userAnswer}</i>
+✅ <b>الصحيحة:</b> <b>${correction.correctAnswer}</b>
+</blockquote>
 `;
     });
 
@@ -473,7 +571,7 @@ ${selectedSurah && selectedSurah !== "__all__" ? `📖 <b>السورة:</b> ${se
 شارك الاختبار مع أصدقائك: https://usamekesmo.github.io/Qurantest/
 `;
 
-    // إرسال التقرير المفصل للقناة الثانية
+    // إرسال التقرير المفصل
     await sendTelegramMessage(detailedReport, TELEGRAM_SECOND_CHANNEL_ID);
   }
 }
@@ -482,8 +580,7 @@ function toggleSurahSelector() {
   const surahSelectorContainer = document.getElementById("surahSelectorContainer");
   if (modeVal === "whichsurah") {
     surahSelectorContainer.classList.add("hidden");
-  } else
-  {
+  } else {
     surahSelectorContainer.classList.remove("hidden");
   }
 }
@@ -493,7 +590,7 @@ function shuffleArray(array) {
 }
 
 function fetchCounter() {
-  // This function is a placeholder. You might implement fetching a counter from a server here if needed.
+  // This function is a placeholder.
 }
 
 function startTimer() {
@@ -531,7 +628,6 @@ function endTest() {
 function showFinalResults() {
   clearInterval(timer);
   
-  // إرسال التقرير النهائي إلى تليجرام
   sendFinalReport();
   
   const percentage = Math.round((score / questions.length) * 100);
@@ -542,52 +638,37 @@ function showFinalResults() {
   else if (percentage >= 50) resultMessage = "حاول مراجعة الأخطاء";
   else resultMessage = "يحتاج إلى مزيد من المراجعة";
 
-  // إنشاء قائمة بالأسئلة والإجابات للمراجعة
   let reviewItems = "";
   questions.forEach((q, index) => {
-    const isWhichSurahType = q.hasOwnProperty('surahname');
     const userAnswer = userAnswers[index] || "لم يتم الإجابة";
+    let questionText = "";
+    let correctAnswerText = "";
 
-    if (isWhichSurahType) {
-      reviewItems += `
-        <div class="correction-item">
-          <div class="correction-question">السؤال ${index + 1}: ${q.aya}</div>
-          <div><span class="answer-label">إجابتك:</span> <span class="user-answer">${userAnswer}</span></div>
-          <div><span class="answer-label">الإجابة الصحيحة:</span> <span class="correct-answer">${q.surahname}</span></div>
-        </div>
-      `;
+    if (q.hasOwnProperty('surahname')) {
+        questionText = `في أي سورة وردت الآية: ${q.aya}`;
+        correctAnswerText = q.surahname;
     } else if (q.hasOwnProperty('ayacomplete')) {
-      reviewItems += `
-        <div class="correction-item">
-          <div class="correction-question">السؤال ${index + 1}: أكمل الآية: ${q.ayacomplete} ...</div>
-          <div><span class="answer-label">إجابتك:</span> <span class="user-answer">${userAnswer}</span></div>
-          <div><span class="answer-label">الإجابة الصحيحة:</span> <span class="correct-answer">${q.correct}</span></div>
-        </div>
-      `;
+        questionText = `أكمل الآية: ${q.ayacomplete} ...`;
+        correctAnswerText = q.correct;
     } else if (q.hasOwnProperty('ayanext')) {
-      reviewItems += `
-        <div class="correction-item">
-          <div class="correction-question">السؤال ${index + 1}: ما هي الآية التالية لـ: ${q.ayanext}</div>
-          <div><span class="answer-label">إجابتك:</span> <span class="user-answer">${userAnswer}</span></div>
-          <div><span class="answer-label">الإجابة الصحيحة:</span> <span class="correct-answer">${q['option' + q['correct option number']]}</span></div>
-        </div>
-      `;
+        questionText = `ما هي الآية التالية لـ: ${q.ayanext}`;
+        correctAnswerText = q['option' + q['correct option number']];
     } else if (q.hasOwnProperty('k1')) {
-      const correctOrderArr = [];
-      for (let i = 1; i <= 12; i++) {
-        const key = `k${i}`;
-        if (q[key] && q[key].trim() !== '') {
-          correctOrderArr.push(q[key].trim());
+        questionText = `رتب كلمات الآية من سورة ${q.surah}`;
+        const correctOrderArr = [];
+        for (let i = 1; i <= 12; i++) {
+            if (q[`k${i}`]) correctOrderArr.push(q[`k${i}`].trim());
         }
-      }
-      reviewItems += `
-        <div class="correction-item">
-          <div class="correction-question">السؤال ${index + 1}: رتب كلمات الآية من سورة ${q.surah}</div>
-          <div><span class="answer-label">إجابتك:</span> <span class="user-answer">${userAnswer}</span></div>
-          <div><span class="answer-label">الإجابة الصحيحة:</span> <span class="correct-answer">${correctOrderArr.join(' ')}</span></div>
-        </div>
-      `;
+        correctAnswerText = correctOrderArr.join(' ');
     }
+
+    reviewItems += `
+      <div class="correction-item">
+        <div class="correction-question">السؤال ${index + 1}: ${questionText}</div>
+        <div><span class="answer-label">إجابتك:</span> <span class="user-answer">${userAnswer}</span></div>
+        <div><span class="answer-label">الإجابة الصحيحة:</span> <span class="correct-answer">${correctAnswerText}</span></div>
+      </div>
+    `;
   });
 
   const resultHTML = `
@@ -595,8 +676,8 @@ function showFinalResults() {
       <h2>نتيجة اختبار القرآن الكريم</h2>
       <div class="result-box">
         <p style="font-size: 24px; color: #2e7d32;">${resultMessage}</p>
-        <p style="font-size: 20px;"><strong>${username || 'زائر'}</strong></p>
-        <p style="font-size: 20px;">النتيجة النهائية: <strong>${roundedScore}/${TOTAL_SCORE}</strong></p>
+        <p><strong>${username || 'زائر'}</strong></p>
+        <p>النتيجة النهائية: <strong>${roundedScore}/${TOTAL_SCORE}</strong></p>
         <p>الإجابات الصحيحة: <strong>${score}/${questions.length}</strong></p>
         <p>النسبة المئوية: <strong>${percentage}%</strong></p>
         <p>نوع الاختبار: <strong>${getModeName(mode)}</strong></p>
@@ -636,7 +717,7 @@ function loadSurahs() {
   fetch(sheetURLs.complete)
     .then(res => res.json())
     .then(data => {
-      const uniqueSurahs = [...new Set(data.map(q => q.surah?.trim()))];
+      const uniqueSurahs = [...new Set(data.map(q => q.surah?.trim()).filter(Boolean))];
       const sortedSurahs = surahOrder.filter(s => uniqueSurahs.includes(s));
       const select = document.getElementById("surahSelector");
       const allOption = document.createElement("option");
@@ -668,19 +749,14 @@ function startQuiz() {
     return;
   }
 
-  // تحديث عرض معلومات المستخدم
   document.getElementById("userNameDisplay").textContent = username || "زائر";
-
   incrementCounter();
 
   currentIndex = 0;
   score = 0;
   questions = [];
   userAnswers = [];
-  feedbackList = [];
   corrections = [];
-  testStarted = false;
-
   totalSeconds = Math.min(questionCount, MAX_QUESTIONS) * TIME_PER_QUESTION;
   remainingSeconds = totalSeconds;
 
@@ -690,205 +766,114 @@ function startQuiz() {
   document.getElementById("startForm").style.display = "none";
   document.getElementById("quizBox").style.display = "block";
 
-  if (mode === "mixed") {
-    Promise.all([
-      fetch(sheetURLs.complete).then(res => res.json()),
-      fetch(sheetURLs.next).then(res => res.json()),
-      fetch(sheetURLs.order).then(res => res.json())
-    ]).then(([completeData, nextData, orderData]) => {
-      let filteredComplete = completeData;
-      let filteredNext = nextData;
-      let filteredOrder = orderData;
-      
-      if (selectedSurah && selectedSurah !== "__all__") {
-        filteredComplete = completeData.filter(q => q.surah?.trim() === selectedSurah.trim());
-        filteredNext = nextData.filter(q => q.surah?.trim() === selectedSurah.trim());
-        filteredOrder = orderData.filter(q => q.surah?.trim() === selectedSurah.trim());
+  const urlsToFetch = [];
+  if (mode === 'mixed' || mode === 'comprehensive') {
+      urlsToFetch.push(fetch(sheetURLs.complete).then(res => res.json()));
+      urlsToFetch.push(fetch(sheetURLs.next).then(res => res.json()));
+      urlsToFetch.push(fetch(sheetURLs.order).then(res => res.json()));
+      if (mode === 'comprehensive') {
+          urlsToFetch.push(fetch(sheetURLs.whichsurah).then(res => res.json()));
       }
-
-      const count = Math.min(questionCount, MAX_QUESTIONS);
-      const thirdCount = Math.ceil(count / 3);
-      
-      const completeQuestions = shuffleArray(filteredComplete).slice(0, thirdCount);
-      const nextQuestions = shuffleArray(filteredNext).slice(0, thirdCount);
-      const orderQuestions = shuffleArray(filteredOrder).slice(0, count - (2 * thirdCount));
-      
-      questions = shuffleArray([...completeQuestions, ...nextQuestions, ...orderQuestions]);
-      startTimer();
-      showQuestion();
-    });
-  } else if (mode === "comprehensive") {
-    Promise.all([
-      fetch(sheetURLs.complete).then(res => res.json()),
-      fetch(sheetURLs.next).then(res => res.json()),
-      fetch(sheetURLs.order).then(res => res.json()),
-      fetch(sheetURLs.whichsurah).then(res => res.json())
-    ]).then(([completeData, nextData, orderData, whichSurahData]) => {
-      let filteredComplete = completeData;
-      let filteredNext = nextData;
-      let filteredOrder = orderData;
-      let filteredWhichSurah = whichSurahData;
-      
-      if (selectedSurah && selectedSurah !== "__all__") {
-        filteredComplete = completeData.filter(q => q.surah?.trim() === selectedSurah.trim());
-        filteredNext = nextData.filter(q => q.surah?.trim() === selectedSurah.trim());
-        filteredOrder = orderData.filter(q => q.surah?.trim() === selectedSurah.trim());
-      }
-
-      const count = Math.min(questionCount, MAX_QUESTIONS);
-      const completeCount = Math.ceil(count * 0.3);
-      const nextCount = Math.ceil(count * 0.3);
-      const orderCount = Math.ceil(count * 0.2);
-      const whichSurahCount = count - completeCount - nextCount - orderCount;
-
-      const completeQuestions = shuffleArray(filteredComplete).slice(0, completeCount);
-      const nextQuestions = shuffleArray(filteredNext).slice(0, nextCount);
-      const orderQuestions = shuffleArray(filteredOrder).slice(0, orderCount);
-      const whichSurahQuestions = shuffleArray(filteredWhichSurah).slice(0, whichSurahCount);
-      
-      questions = shuffleArray([...completeQuestions, ...nextQuestions, ...orderQuestions, ...whichSurahQuestions]);
-      startTimer();
-      showQuestion();
-    });
-  } else if (mode === "whichsurah") {
-    fetch(sheetURLs.whichsurah)
-      .then(res => res.json())
-      .then(data => {
-        const count = Math.min(questionCount, MAX_QUESTIONS);
-        questions = shuffleArray(data).slice(0, count);
-        startTimer();
-        showQuestion();
-      });
   } else {
-    fetch(sheetURLs[mode])
-      .then(res => res.json())
-      .then(data => {
-        let filtered = data;
-        if (selectedSurah && selectedSurah !== "__all__") {
-          filtered = data.filter(q => q.surah?.trim() === selectedSurah.trim());
-        }
-        const count = Math.min(questionCount, MAX_QUESTIONS);
-        questions = shuffleArray(filtered).slice(0, count);
-        startTimer();
-        showQuestion();
-      });
+      urlsToFetch.push(fetch(sheetURLs[mode]).then(res => res.json()));
   }
+
+  Promise.all(urlsToFetch).then(allData => {
+      let allQuestions = [];
+      if (mode === 'comprehensive') {
+          const [completeData, nextData, orderData, whichSurahData] = allData;
+          let fComplete = selectedSurah === '__all__' ? completeData : completeData.filter(q => q.surah?.trim() === selectedSurah);
+          let fNext = selectedSurah === '__all__' ? nextData : nextData.filter(q => q.surah?.trim() === selectedSurah);
+          let fOrder = selectedSurah === '__all__' ? orderData : orderData.filter(q => q.surah?.trim() === selectedSurah);
+          allQuestions = [...fComplete, ...fNext, ...fOrder, ...whichSurahData];
+      } else if (mode === 'mixed') {
+          const [completeData, nextData, orderData] = allData;
+          let fComplete = selectedSurah === '__all__' ? completeData : completeData.filter(q => q.surah?.trim() === selectedSurah);
+          let fNext = selectedSurah === '__all__' ? nextData : nextData.filter(q => q.surah?.trim() === selectedSurah);
+          let fOrder = selectedSurah === '__all__' ? orderData : orderData.filter(q => q.surah?.trim() === selectedSurah);
+          allQuestions = [...fComplete, ...fNext, ...fOrder];
+      } else {
+          let data = allData[0];
+          allQuestions = (selectedSurah && selectedSurah !== '__all__') ? data.filter(q => q.surah?.trim() === selectedSurah) : data;
+      }
+      
+      questions = shuffleArray(allQuestions).slice(0, Math.min(questionCount, MAX_QUESTIONS));
+      startTimer();
+      showQuestion();
+  });
 }
 
 function showQuestion() {
-  if (!testStarted) {
-    testStarted = true;
-  }
-
   document.getElementById('feedback').innerText = "";
   if (currentIndex >= questions.length) {
-    clearInterval(timer);
-    showFinalResults();
+    endTest();
     return;
   }
 
   const q = questions[currentIndex];
+  const questionType = q.hasOwnProperty('ayacomplete') ? 'complete' :
+                       q.hasOwnProperty('ayanext') ? 'next' :
+                       q.hasOwnProperty('k1') ? 'order' : 'whichsurah';
 
-  const isCompleteType = q.hasOwnProperty('ayacomplete');
-  const isNextType = q.hasOwnProperty('ayanext');
-  const isOrderType = q.hasOwnProperty('k1');
-  const isWhichSurahType = q.hasOwnProperty('surahname');
+  document.getElementById("completeMode").style.display = questionType === 'complete' ? 'block' : 'none';
+  document.getElementById("nextMode").style.display = questionType === 'next' ? 'block' : 'none';
+  document.getElementById("orderMode").style.display = questionType === 'order' ? 'block' : 'none';
+  document.getElementById("whichSurahMode").style.display = questionType === 'whichsurah' ? 'block' : 'none';
 
-  if (mode === "complete" || (mode === "mixed" && isCompleteType) || (mode === "comprehensive" && isCompleteType)) {
-    document.getElementById("completeMode").style.display = "block";
-    document.getElementById("nextMode").style.display = "none";
-    document.getElementById("orderMode").style.display = "none";
-    document.getElementById("whichSurahMode").style.display = "none";
-
-    document.getElementById("currentAyah").innerHTML = `
-      <div class="ayah-decoration">
-        السؤال ${currentIndex + 1}: ${q.ayacomplete} ...
-      </div>`;
-    document.getElementById("userAnswer").value = "";
-  } else if (mode === "next" || (mode === "mixed" && isNextType) || (mode === "comprehensive" && isNextType)) {
-    document.getElementById("completeMode").style.display = "none";
-    document.getElementById("nextMode").style.display = "block";
-    document.getElementById("orderMode").style.display = "none";
-    document.getElementById("whichSurahMode").style.display = "none";
-
-    document.getElementById("currentAyah").innerHTML = `
-      <div class="ayah-decoration">
-        السؤال ${currentIndex + 1}: ${q.ayanext}
-      </div>`;
-    const choices = [q.option1, q.option2, q.option3, q.option4];
-    const correctIndex = parseInt(q["correct option number"]) - 1;
-    const correctAnswer = choices[correctIndex];
-    const shuffled = shuffleArray(choices);
-    document.getElementById("choices").innerHTML = "";
-    shuffled.forEach(choice => {
-      const btn = document.createElement("button");
-      btn.className = "option-btn";
-      btn.innerText = choice;
-      btn.onclick = () => checkNextAnswer(choice, correctAnswer, btn);
-      document.getElementById("choices").appendChild(btn);
-    });
-  } else if (mode === "order" || (mode === "mixed" && isOrderType) || (mode === "comprehensive" && isOrderType)) {
-    document.getElementById("completeMode").style.display = "none";
-    document.getElementById("nextMode").style.display = "none";
-    document.getElementById("orderMode").style.display = "block";
-    document.getElementById("whichSurahMode").style.display = "none";
-
-    document.getElementById("currentAyah").innerHTML = `
-      <div class="ayah-decoration">
-        السؤال ${currentIndex + 1}: رتب كلمات الآية من سورة ${q.surah}
-      </div>`;
-    setupOrderQuestion(q);
-  } else if (mode === "whichsurah" || (mode === "comprehensive" && isWhichSurahType)) {
-    document.getElementById("completeMode").style.display = "none";
-    document.getElementById("nextMode").style.display = "none";
-    document.getElementById("orderMode").style.display = "none";
-    document.getElementById("whichSurahMode").style.display = "block";
-
-    document.getElementById("currentAyah").innerHTML = `
-      <div class="ayah-decoration">
-        السؤال ${currentIndex + 1}: في أي سورة وردت هذه الآية؟
-        <p style="font-size: 20px; margin-top: 10px;">${q.aya}</p>
-      </div>`;
-    const choices = [q.surahname, q.option2, q.option3, q.option4];
-    const shuffled = shuffleArray(choices);
-    document.getElementById("whichSurahChoices").innerHTML = "";
-    shuffled.forEach(choice => {
-      const btn = document.createElement("button");
-      btn.className = "option-btn";
-      btn.innerText = choice;
-      btn.onclick = () => checkWhichSurahAnswer(choice, q.surahname, btn);
-      document.getElementById("whichSurahChoices").appendChild(btn);
-    });
+  let questionHTML = '';
+  switch (questionType) {
+      case 'complete':
+          questionHTML = `السؤال ${currentIndex + 1}: ${q.ayacomplete} ...`;
+          document.getElementById("userAnswer").value = "";
+          break;
+      case 'next':
+          questionHTML = `السؤال ${currentIndex + 1}: ${q.ayanext}`;
+          const choices = shuffleArray([q.option1, q.option2, q.option3, q.option4]);
+          const choicesContainer = document.getElementById("choices");
+          choicesContainer.innerHTML = "";
+          choices.forEach(choice => {
+              const btn = document.createElement("button");
+              btn.className = "option-btn";
+              btn.innerText = choice;
+              btn.onclick = () => checkNextAnswer(choice, q['option' + q['correct option number']], btn);
+              choicesContainer.appendChild(btn);
+          });
+          break;
+      case 'order':
+          questionHTML = `السؤال ${currentIndex + 1}: رتب كلمات الآية من سورة ${q.surah}`;
+          setupOrderQuestion(q);
+          break;
+      case 'whichsurah':
+          questionHTML = `السؤال ${currentIndex + 1}: في أي سورة وردت هذه الآية؟<p style="font-size: 20px; margin-top: 10px;">${q.aya}</p>`;
+          const surahChoices = shuffleArray([q.surahname, q.option2, q.option3, q.option4]);
+          const surahChoicesContainer = document.getElementById("whichSurahChoices");
+          surahChoicesContainer.innerHTML = "";
+          surahChoices.forEach(choice => {
+              const btn = document.createElement("button");
+              btn.className = "option-btn";
+              btn.innerText = choice;
+              btn.onclick = () => checkWhichSurahAnswer(choice, q.surahname, btn);
+              surahChoicesContainer.appendChild(btn);
+          });
+          break;
   }
+  document.getElementById("currentAyah").innerHTML = `<div class="ayah-decoration">${questionHTML}</div>`;
 }
 
 function setupOrderQuestion(q) {
-  const wordsContainer = document.getElementById("wordsContainer");
-  const dropZone = document.getElementById("dropZone");
-  const droppedWords = document.getElementById("droppedWords");
-  const emptyMessage = document.getElementById("emptyMessage");
-  const checkBtn = document.getElementById("checkBtn");
-  const resultMessage = document.getElementById("resultMessage");
-
-  const currentVerseWords = [];
   correctOrder = [];
   for (let i = 1; i <= 12; i++) {
-    const key = `k${i}`;
-    if (q[key] && q[key].trim() !== '') {
-      currentVerseWords.push(q[key].trim());
-      correctOrder.push(q[key].trim());
-    }
+    if (q[`k${i}`]) correctOrder.push(q[`k${i}`].trim());
   }
-
-  const shuffledWords = shuffleArray([...currentVerseWords]);
-
-  document.getElementById("wordsContainer").innerHTML = '';
+  const shuffledWords = shuffleArray([...correctOrder]);
+  const wordsContainer = document.getElementById("wordsContainer");
+  wordsContainer.innerHTML = '';
   shuffledWords.forEach(word => {
     const wordBtn = document.createElement('button');
     wordBtn.className = 'word-btn';
     wordBtn.textContent = word;
-    wordBtn.onclick = () => handleWordClick(wordBtn, q);
-    document.getElementById("wordsContainer").appendChild(wordBtn);
+    wordBtn.onclick = () => handleWordClick(wordBtn);
+    wordsContainer.appendChild(wordBtn);
   });
 
   document.getElementById("droppedWords").innerHTML = '';
@@ -897,152 +882,97 @@ function setupOrderQuestion(q) {
 
   document.getElementById("checkBtn").onclick = () => {
     const userOrder = Array.from(document.getElementById("droppedWords").children).map(el => el.textContent);
-    if (userOrder.length !== correctOrder.length) {
-      document.getElementById("resultMessage").textContent = 'لم تكتمل الإجابة بعد!';
-      return;
-    }
-    const isCorrect = userOrder.every((word, index) => word === correctOrder[index]);
-    if (isCorrect) {
-      score++;
-      document.getElementById("feedback").innerText = "✅ إجابة صحيحة!";
-      document.getElementById("feedback").className = "answer-feedback correct";
-    } else {
-      document.getElementById("feedback").innerText = `❌ الإجابة الصحيحة: ${correctOrder.join(' ')}`;
-      document.getElementById("feedback").className = "answer-feedback wrong";
-      corrections.push({
-        question: `رتب كلمات الآية من سورة ${q.surah}`,
-        userAnswer: userOrder.join(' '),
-        correctAnswer: correctOrder.join(' ')
-      });
-    }
-    userAnswers[currentIndex] = userOrder.join(' ');
-    setTimeout(() => {
-      currentIndex++;
-      showQuestion();
-    }, 2000);
+    const isCorrect = JSON.stringify(userOrder) === JSON.stringify(correctOrder);
+    handleAnswer(isCorrect, userOrder.join(' '), correctOrder.join(' '));
   };
 }
 
-function handleWordClick(wordBtn, q) {
+function handleWordClick(wordBtn) {
   const droppedWords = document.getElementById("droppedWords");
-  const emptyMessage = document.getElementById("emptyMessage");
-  const resultMessage = document.getElementById("resultMessage");
-  if (droppedWords.contains(wordBtn)) {
-    droppedWords.removeChild(wordBtn);
-    document.getElementById("wordsContainer").appendChild(wordBtn);
-    if (droppedWords.children.length === 0) {
-      emptyMessage.style.display = 'block';
-    }
-  } else {
-    wordBtn.remove();
+  const wordsContainer = document.getElementById("wordsContainer");
+  if (wordBtn.parentElement === wordsContainer) {
     droppedWords.appendChild(wordBtn);
-    emptyMessage.style.display = 'none';
+  } else {
+    wordsContainer.appendChild(wordBtn);
   }
+  document.getElementById("emptyMessage").style.display = droppedWords.children.length === 0 ? 'block' : 'none';
 }
 
 function checkCompleteAnswer() {
   const q = questions[currentIndex];
   const userAnswer = document.getElementById("userAnswer").value.trim();
-  const correctAnswer = q.correct ? q.correct.trim() : "";
+  const correctAnswer = q.correct.trim();
+  const normalizedUser = userAnswer.replace(/[.,،]/g, '').replace(/\s+/g, ' ').trim();
+  const normalizedCorrect = correctAnswer.replace(/[.,،]/g, '').replace(/\s+/g, ' ').trim();
+  handleAnswer(normalizedUser === normalizedCorrect, userAnswer, correctAnswer);
+}
 
-  if (!userAnswer) {
-    alert("يرجى إدخال إجابة");
-    return;
-  }
+function checkNextAnswer(selected, correct, button) {
+  handleAnswer(selected === correct, selected, correct, button);
+}
 
-  const normalizedUserAnswer = userAnswer.replace(/[.,،]/g, '').replace(/\s+/g, ' ').trim();
-  const normalizedCorrectAnswer = correctAnswer.replace(/[.,،]/g, '').replace(/\s+/g, ' ').trim();
+function checkWhichSurahAnswer(selected, correct, button) {
+  handleAnswer(selected === correct, selected, correct, button);
+}
 
+function handleAnswer(isCorrect, userAnswer, correctAnswer, button = null) {
   userAnswers[currentIndex] = userAnswer;
+  const feedbackEl = document.getElementById("feedback");
 
-  if (normalizedUserAnswer === normalizedCorrectAnswer && correctAnswer !== "") {
+  if (isCorrect) {
     score++;
-    document.getElementById("feedback").innerText = "✅ إجابة صحيحة!";
-    document.getElementById("feedback").className = "answer-feedback correct";
+    feedbackEl.innerText = "✅ إجابة صحيحة!";
+    feedbackEl.className = "answer-feedback correct";
+    if (button) button.classList.add("correct");
   } else {
-    const displayCorrect = correctAnswer !== "" ? correctAnswer : "غير متوفر";
-    document.getElementById("feedback").innerText = `❌ الإجابة الصحيحة: ${displayCorrect}`;
-    document.getElementById("feedback").className = "answer-feedback wrong";
+    feedbackEl.innerText = `❌ الإجابة الصحيحة: ${correctAnswer}`;
+    feedbackEl.className = "answer-feedback wrong";
+    if (button) button.classList.add("wrong");
+    
+    const q = questions[currentIndex];
+    let questionText = "";
+    if (q.hasOwnProperty('ayacomplete')) questionText = `أكمل الآية: ${q.ayacomplete} ...`;
+    else if (q.hasOwnProperty('ayanext')) questionText = `ما هي الآية التالية لـ: ${q.ayanext}`;
+    else if (q.hasOwnProperty('k1')) questionText = `رتب كلمات الآية من سورة ${q.surah}`;
+    else if (q.hasOwnProperty('aya')) questionText = `في أي سورة وردت الآية: ${q.aya}`;
+
     corrections.push({
-      question: `أكمل الآية: ${q.ayacomplete} ...`,
+      question: questionText,
       userAnswer: userAnswer,
-      correctAnswer: displayCorrect
-    });
-  }
-
-  setTimeout(() => {
-    currentIndex++;
-    showQuestion();
-  }, 2000);
-}
-
-function checkNextAnswer(selectedAnswer, correctAnswer, button) {
-  userAnswers[currentIndex] = selectedAnswer;
-
-  if (selectedAnswer === correctAnswer) {
-    score++;
-    button.className = "option-btn correct";
-    document.getElementById("feedback").innerText = "✅ إجابة صحيحة!";
-    document.getElementById("feedback").className = "answer-feedback correct";
-  } else {
-    button.className = "option-btn wrong";
-    document.getElementById("feedback").innerText = `❌ الإجابة الصحيحة: ${correctAnswer}`;
-    document.getElementById("feedback").className = "answer-feedback wrong";
-    corrections.push({
-      question: `ما هي الآية التالية لـ: ${questions[currentIndex].ayanext}`,
-      userAnswer: selectedAnswer,
       correctAnswer: correctAnswer
     });
   }
+
+  // Disable further interaction
+  const buttons = document.querySelectorAll('#choices button, #whichSurahChoices button, #checkBtn');
+  buttons.forEach(btn => btn.disabled = true);
+  document.getElementById('userAnswer').disabled = true;
+
   setTimeout(() => {
     currentIndex++;
     showQuestion();
-  }, 2000);
-}
-
-function checkWhichSurahAnswer(selectedAnswer, correctAnswer, button) {
-  userAnswers[currentIndex] = selectedAnswer;
-
-  if (selectedAnswer === correctAnswer) {
-    score++;
-    button.className = "option-btn correct";
-    document.getElementById("feedback").innerText = "✅ إجابة صحيحة!";
-    document.getElementById("feedback").className = "answer-feedback correct";
-  } else {
-    button.className = "option-btn wrong";
-    document.getElementById("feedback").innerText = `❌ الإجابة الصحيحة: ${correctAnswer}`;
-    document.getElementById("feedback").className = "answer-feedback wrong";
-    corrections.push({
-      question: `في أي سورة وردت الآية: ${questions[currentIndex].aya}`,
-      userAnswer: selectedAnswer,
-      correctAnswer: correctAnswer
-    });
-  }
-  setTimeout(() => {
-    currentIndex++;
-    showQuestion();
+    // Re-enable for next question
+    buttons.forEach(btn => btn.disabled = false);
+    document.getElementById('userAnswer').disabled = false;
   }, 2000);
 }
 
 function storeResultInSheet() {
-  const percentage = Math.round((score / questions.length) * 100);
-  const correctCount = score;
-  const wrongCount = questions.length - score;
   const data = {
-    date: new Date().toLocaleString(),
+    date: new Date().toLocaleString('ar-EG'),
     username: username || 'زائر',
     mode: getModeName(mode),
     surah: selectedSurah === "__all__" ? "كل السور" : selectedSurah,
     questioncount: questions.length,
     score: Math.round((TOTAL_SCORE / questions.length) * score),
-    correctCount: correctCount,
-    wrongCount: wrongCount
+    correctCount: score,
+    wrongCount: questions.length - score
   };
   fetch(sheetURLs.results, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data)
-  }).catch(e => console.error(e));
+  }).catch(e => console.error('Failed to store result:', e));
 }
 
 window.onload = function() {
